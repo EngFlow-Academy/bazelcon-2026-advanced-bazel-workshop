@@ -1,0 +1,27 @@
+load("@pip//:requirements.bzl", "requirement")
+load("@rules_python//python:defs.bzl", "py_binary")
+
+py_binary(
+    name = "build_deck",
+    srcs = ["build_deck.py"],
+    deps = [
+        requirement("lxml"),
+        requirement("python-pptx"),
+    ],
+)
+
+genrule(
+    name = "deck",
+    srcs = [
+        "//slides/template:EngFlow_Dark_Template.pptx",
+        "WORKSHOP.md",
+    ],
+    outs = ["AdvancedBazel_TestingAndValidation.pptx"],
+    cmd = """
+$(execpath :build_deck) \\
+    --template $(execpath //slides/template:EngFlow_Dark_Template.pptx) \\
+    --workshop-md $(execpath WORKSHOP.md) \\
+    --output $@
+""",
+    tools = [":build_deck"],
+)
