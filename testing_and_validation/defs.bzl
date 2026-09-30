@@ -45,3 +45,16 @@ mini_test = rule(
     },
     doc = "Runs the `test` blocks of a minilang program using the //cli CLI.",
 )
+
+def _mini_mutation_testing_aspect_impl(target, ctx):
+    if ctx.rule.kind != "mini_test":
+        return []
+
+    marker = ctx.actions.declare_file(target.label.name + ".mutation_marker")
+    ctx.actions.write(output = marker, content = "placeholder\n")
+    return [OutputGroupInfo(_validation = depset([marker]))]
+
+mini_mutation_testing_aspect = aspect(
+    implementation = _mini_mutation_testing_aspect_impl,
+    doc = "Placeholder aspect: emits a marker file into the _validation output group so Bazel runs it automatically on every build of a mini_test target.",
+)
