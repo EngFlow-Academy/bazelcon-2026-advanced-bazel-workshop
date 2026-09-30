@@ -19,5 +19,11 @@ ARGS=()
 if [[ -n "${XML_OUTPUT_FILE:-}" ]]; then
   ARGS+=(--junit-xml "${XML_OUTPUT_FILE}")
 fi
+if [[ -n "${TEST_TOTAL_SHARDS:-}" && "${TEST_TOTAL_SHARDS}" -gt 1 ]]; then
+  ARGS+=(--shard-count "${TEST_TOTAL_SHARDS}" --shard-index "${TEST_SHARD_INDEX:-0}")
+  if [[ -n "${TEST_SHARD_STATUS_FILE:-}" ]]; then
+    touch "${TEST_SHARD_STATUS_FILE}"
+  fi
+fi
 
 exec "${CLI}" test "${SRC}" ${ARGS[@]+"${ARGS[@]}"}

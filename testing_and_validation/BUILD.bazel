@@ -13,11 +13,8 @@ mini_test(
     src = "example.mini",
 )
 
-# TODO(stage 1): once the launcher template forwards shard env vars, add a
-# sharded target to verify:
-#
-#   mini_test(
-#       name = "example_test_sharded",
-#       src = "example.mini",
-#       shard_count = 3,
-#   )
+mini_test(
+    name = "example_test_sharded",
+    src = "example.mini",
+    shard_count = 3,
+)
