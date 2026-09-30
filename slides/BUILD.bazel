@@ -12,15 +12,11 @@ py_binary(
 
 genrule(
     name = "deck",
-    srcs = [
-        "//slides/template:EngFlow_Dark_Template.pptx",
-        "WORKSHOP.md",
-    ],
+    srcs = ["//slides/template:EngFlow_Dark_Template.pptx"],
     outs = ["AdvancedBazel_TestingAndValidation.pptx"],
     cmd = """
 $(execpath :build_deck) \\
     --template $(execpath //slides/template:EngFlow_Dark_Template.pptx) \\
-    --workshop-md $(execpath WORKSHOP.md) \\
     --output $@
 """,
     tools = [":build_deck"],
