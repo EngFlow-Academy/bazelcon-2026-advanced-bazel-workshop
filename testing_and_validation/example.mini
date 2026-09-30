@@ -1,0 +1,68 @@
+// Function 1: Demonstrates if/else, relational operators, and return
+fn clamp(val, min_val, max_val) {
+    if (val < min_val) {
+        return min_val;
+    } else {
+        if (val > max_val) {
+            return max_val;
+        }
+    }
+    return val;
+}
+
+// Function 2: Demonstrates all arithmetic operators (+, -, *, /, %) and grouping
+fn math_ops(a, b) {
+    print (a + b) * (a - b);
+    print a / b;
+    return a % b;
+}
+
+// Function 3: Demonstrates logical operators (&, |, !), booleans, and relational checks
+fn evaluate_access(age, has_permission, is_banned) {
+    // Uses >=, <=, !=, &, |, !
+    if (!is_banned & (has_permission | (age >= 18 & age <= 65 & age != 21))) {
+        return true;
+    }
+    return false;
+}
+
+// Function 4: Demonstrates unary minus and print statement
+fn log_step(step_id) {
+    print step_id;
+    return 0 - step_id;
+}
+
+
+// --- Test Definitions ---
+
+test "test_clamp_and_bounds" {
+    // Unary negative integer literal (-10)
+    assert clamp(-10, 0, 100) == 0;
+    assert clamp(150, 0, 100) == 100;
+    assert clamp(50, 0, 100) == 50;
+
+    // Relational operators: <=, >=, !=
+    assert 5 <= 5;
+    assert 10 >= 3;
+    assert 7 != 8;
+}
+
+test "test_arithmetic_operators" {
+    // Expression statement evaluated for side effect (printing)
+    log_step(1);
+
+    // Testing arithmetic operations
+    assert (10 + 5) == 15;
+    assert (10 - 5) == 5;
+    assert (10 * 5) == 50;
+    assert (10 / 5) == 2;
+    assert math_ops(10, 3) == 1; // 10 % 3 == 1
+}
+
+test "test_boolean_logic" {
+    // Expressions evaluating boolean logic
+    assert evaluate_access(25, false, false);
+    assert !evaluate_access(21, false, false); // Blocked by age != 21 rule
+    assert evaluate_access(21, true, false);  // Overridden by has_permission
+    assert !evaluate_access(25, true, true);   // Blocked by is_banned
+}

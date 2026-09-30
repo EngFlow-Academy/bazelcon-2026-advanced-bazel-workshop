@@ -1,0 +1,23 @@
+load("//:defs.bzl", "mini_test")
+
+package(default_visibility = ["//visibility:public"])
+
+exports_files([
+    "defs.bzl",
+    "example.mini",
+    "runner.sh.tpl",
+])
+
+mini_test(
+    name = "example_test",
+    src = "example.mini",
+)
+
+# TODO(stage 1): once the launcher template forwards shard env vars, add a
+# sharded target to verify:
+#
+#   mini_test(
+#       name = "example_test_sharded",
+#       src = "example.mini",
+#       shard_count = 3,
+#   )
