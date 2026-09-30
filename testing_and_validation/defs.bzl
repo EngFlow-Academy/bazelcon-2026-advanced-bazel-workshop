@@ -50,11 +50,35 @@ def _mini_mutation_testing_aspect_impl(target, ctx):
     if ctx.rule.kind != "mini_test":
         return []
 
-    marker = ctx.actions.declare_file(target.label.name + ".mutation_marker")
-    ctx.actions.write(output = marker, content = "placeholder\n")
-    return [OutputGroupInfo(_validation = depset([marker]))]
+    src = ctx.rule.attr.src.files.to_list()[0]
+    cli_files_to_run = ctx.attr._cli[DefaultInfo].files_to_run
+
+    mutations_dir = ctx.actions.declare_directory(target.label.name + ".mutations")
+    args = ctx.actions.args()
+    args.add("mutate")
+    args.add("list")
+    args.add(src.path)
+    args.add("-o")
+    args.add(mutations_dir.path)
+    ctx.actions.run(
+        executable = cli_files_to_run,
+        inputs = [src],
+        outputs = [mutations_dir],
+        arguments = [args],
+        mnemonic = "MiniMutationList",
+        progress_message = "Enumerating minilang mutations for %{label}",
+    )
+
+    return [OutputGroupInfo(_validation = depset([mutations_dir]))]
 
 mini_mutation_testing_aspect = aspect(
     implementation = _mini_mutation_testing_aspect_impl,
-    doc = "Placeholder aspect: emits a marker file into the _validation output group so Bazel runs it automatically on every build of a mini_test target.",
+    attrs = {
+        "_cli": attr.label(
+            default = "//cli:cli",
+            executable = True,
+            cfg = "exec",
+        ),
+    },
+    doc = "Enumerates the mutations of a mini_test target's source into a tree artifact.",
 )
