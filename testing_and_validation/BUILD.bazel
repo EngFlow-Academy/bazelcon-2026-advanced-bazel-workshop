@@ -1,4 +1,4 @@
-load("//:defs.bzl", "mini_test")
+load("//testing_and_validation:defs.bzl", "mini_test")
 
 package(default_visibility = ["//visibility:public"])
 
