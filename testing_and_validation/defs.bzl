@@ -34,14 +34,14 @@ mini_test = rule(
             doc = "The .mini source file containing test blocks to run.",
         ),
         "_cli": attr.label(
-            default = "//cli:cli",
+            default = "//testing_and_validation/cli:cli",
             executable = True,
             cfg = "exec",
         ),
         "_runner_tpl": attr.label(
-            default = "//:runner.sh.tpl",
+            default = "//testing_and_validation:runner.sh.tpl",
             allow_single_file = True,
         ),
     },
-    doc = "Runs the `test` blocks of a minilang program using the //cli CLI.",
+    doc = "Runs the `test` blocks of a minilang program using the //testing_and_validation/cli CLI.",
 )
